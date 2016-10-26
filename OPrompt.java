@@ -1,6 +1,7 @@
 import java.util.Scanner;
 
 import java.io.File;
+import java.io.IOException;
 
 public class OPrompt {
 
@@ -26,6 +27,12 @@ public class OPrompt {
 		File file;
 		do {
 			file = new File(getString(ask));
+			if (!exists && !file.exists())
+				try {
+					file.createNewFile();
+					if (file.exists())
+						return file;
+				} catch (IOException e) {}
 		} while (file.exists() && file.isDirectory() || exists && !file.exists());
 		return file;
 	}
@@ -34,6 +41,9 @@ public class OPrompt {
 		File file;
 		do {
 			file = new File(getString(ask));
+			if (!exists && !file.exists())
+				if (file.mkdir())
+					return file;
 		} while (file.exists() && !file.isDirectory() || exists && !file.exists());
 		return file;
 	}
